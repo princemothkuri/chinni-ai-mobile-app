@@ -17,6 +17,7 @@ import Voice, {
   SpeechErrorEvent,
 } from "@react-native-voice/voice";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import Ionicons from "@expo/vector-icons/build/Ionicons";
 
 // Define the Message type
 type Message = {
@@ -27,10 +28,6 @@ type Message = {
 const ChinniAi: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]); // Use the Message type
   const [inputText, setInputText] = useState<string>("");
-  const [isMicOn, setMicOn] = useState<boolean>(false);
-  const [isSpeaking, setSpeaking] = useState<boolean>(true);
-  const [isListening, setListening] = useState<boolean>(false);
-  const [recognizedText, setRecognizedText] = useState<string>("");
 
   const theme = useColorScheme();
   const isDarkTheme = theme === "dark";
@@ -44,111 +41,37 @@ const ChinniAi: React.FC = () => {
 
   // Suggested topics when no messages are present
   const suggestedMessages = [
-    "Can you help me find information on the latest tech trends?",
-    "What are the most recent advancements in AI and machine learning?",
-    "Can AI help me gather real-time data for market research?",
-    "Can I get personalized recommendations based on my past interactions?",
-    "Generate an image based on my description.",
-    "Can you analyze and summarize past conversations for insights?",
-    "How can AI assist with writing content or creative brainstorming?",
-    "Can AI predict trends based on current data?",
-    "Help me with designing a unique logo using AI-generated visuals.",
-    "Can you provide real-time updates on weather or news?",
+    {
+      title: "Create image",
+      description: "Create an image based on your description.",
+      icon: "image",
+    },
+    {
+      title: "Get advice",
+      description: "Get advice on your problem.",
+      icon: "chat",
+    },
+    {
+      title: "Summarize text",
+      description: "Summarize the text you want to summarize.",
+      icon: "document",
+    },
+    {
+      title: "Surprise me",
+      description: "Surprise me with a random idea.",
+      icon: "dice",
+    },
+    {
+      title: "Send email",
+      description: "Send an email to your friend.",
+      icon: "mail",
+    },
+    {
+      title: "Make a plan",
+      description: "Make a plan for your day.",
+      icon: "calendar",
+    },
   ];
-
-  const requestPermissions = async () => {
-    if (Platform.OS === "android") {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-          {
-            title: "Microphone Access Required",
-            message:
-              "Chinni AI needs access to your microphone for speech recognition.",
-            buttonNeutral: "Ask Me Later",
-            buttonNegative: "Cancel",
-            buttonPositive: "OK",
-          }
-        );
-
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log("Microphone permission granted");
-        } else {
-          console.log("Microphone permission denied");
-        }
-      } catch (err) {
-        console.warn(err);
-      }
-    } else if (Platform.OS === "ios") {
-      Alert.alert(
-        "Permission Required",
-        "Please enable microphone access in settings to use speech recognition.",
-        [{ text: "OK", onPress: () => console.log("Permission alert closed") }]
-      );
-    }
-  };
-
-  useEffect(() => {
-    const checkMicrophonePermission = async () => {
-      const hasPermission = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-      );
-      // if (!hasPermission) {
-      //   requestPermissions();
-      // }
-      if (!hasPermission) {
-        await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
-        );
-      }
-    };
-
-    checkMicrophonePermission();
-  }, []);
-
-  useEffect(() => {
-    Voice.onSpeechStart = () => console.log("Speech started");
-    Voice.onSpeechResults = (result) => console.log("Speech results:", result);
-    Voice.onSpeechError = (error) => console.error("Speech error:", error);
-
-    return () => {
-      Voice.destroy().then(Voice.removeAllListeners);
-    };
-  }, []);
-
-  const startSpeechToText = async () => {
-    setListening(true);
-    console.log(Voice);
-
-    try {
-      await Voice.start("en-US");
-      console.log("Voice started successfully");
-    } catch (error) {
-      console.log("Error starting Voice:", error);
-    }
-  };
-
-  const stopSpeechToText = async () => {
-    setListening(false);
-    await Voice.stop();
-  };
-
-  // Define the type of result
-  const onSpeechResults = (result: SpeechResultsEvent) => {
-    console.log("Speech Results:", result);
-    if (result?.value && result?.value.length > 0) {
-      setRecognizedText(result.value[0]);
-      setInputText((prev) => prev + (result.value ? result.value[0] : ""));
-    }
-  };
-
-  const onSpeechError = (error: SpeechErrorEvent) => {
-    console.log("Speech Error:", error.error);
-    Alert.alert(
-      "Speech Recognition Error",
-      error.error?.message || "Unknown error occurred"
-    );
-  };
 
   return (
     <KeyboardAvoidingView
@@ -179,34 +102,44 @@ const ChinniAi: React.FC = () => {
             <Text
               style={[
                 styles.suggestedText,
-                { color: isDarkTheme ? "#ccc" : "#333" },
+                {
+                  color: isDarkTheme ? "#fff" : "#000",
+                  fontSize: 22,
+                  marginBottom: 20,
+                },
               ]}
             >
-              Start the conversation by asking about:
+              Let's get started!
             </Text>
-            {suggestedMessages.map((message, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => {
-                  setMessages((prev) => [
-                    ...prev,
-                    { type: "user", text: message },
-                  ]);
-                }}
-                style={styles.suggestedMessage}
-              >
-                <Text
-                  style={[
-                    styles.suggestedText,
-                    {
-                      color: isDarkTheme ? "#62b6ff" : "#007bff",
-                    },
-                  ]}
+            <Text
+              style={[
+                styles.suggestedText,
+                {
+                  color: isDarkTheme ? "#aaa" : "#333",
+                  fontSize: 16,
+                  marginBottom: 30,
+                },
+              ]}
+            >
+              Choose an action below or type your own message to get started
+            </Text>
+            <View style={styles.gridContainer}>
+              {suggestedMessages.map((label, index) => (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() =>
+                    setMessages((prev) => [
+                      ...prev,
+                      { type: "user", text: label.title },
+                    ])
+                  }
+                  style={styles.gridButton}
                 >
-                  {message}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Ionicons name={label.icon as any} size={24} color="white" />
+                  <Text style={styles.gridButtonText}>{label.title}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
         ) : (
           // Display messages if present
@@ -260,20 +193,6 @@ const ChinniAi: React.FC = () => {
           { backgroundColor: isDarkTheme ? "#1e1e1e" : "#fff" },
         ]}
       >
-        {/* AI Speaker Control */}
-        {!inputText && (
-          <TouchableOpacity
-            onPress={() => setSpeaking(!isSpeaking)}
-            style={styles.iconButton}
-          >
-            <Icon
-              name={isSpeaking ? "volume-up" : "volume-off"}
-              size={24}
-              color={isDarkTheme ? "#62b6ff" : "#007bff"}
-            />
-          </TouchableOpacity>
-        )}
-
         {/* Text Input */}
         <TextInput
           style={[
@@ -291,26 +210,9 @@ const ChinniAi: React.FC = () => {
           onChangeText={setInputText}
           onSubmitEditing={sendMessage}
         />
-
-        {/* Mic Button */}
-        {!inputText && (
-          <TouchableOpacity
-            onPress={() => {
-              if (isListening) {
-                stopSpeechToText();
-              } else {
-                startSpeechToText();
-              }
-            }}
-            style={styles.iconButton}
-          >
-            <Icon
-              name={isListening ? "mic" : "mic-off"}
-              size={24}
-              color="#007bff"
-            />
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity style={styles.sendButton}>
+          <Ionicons name="send" size={20} color="white" />
+        </TouchableOpacity>
       </View>
     </KeyboardAvoidingView>
   );
@@ -351,9 +253,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingVertical: 10,
     borderTopWidth: 1,
     borderTopColor: "#ddd",
+    gap: 10,
   },
   textInput: {
     flex: 1,
@@ -379,6 +282,41 @@ const styles = StyleSheet.create({
   },
   suggestedText: {
     fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  gridContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    gap: 10,
+  },
+  gridButton: {
+    width: "45%",
+    height: 80,
+    margin: 5,
+    padding: 15,
+    backgroundColor: "#fe6863",
+    borderRadius: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "column",
+    gap: 6,
+  },
+  gridButtonText: {
+    color: "#fff",
+    fontSize: 14,
+    textAlign: "center",
+    fontWeight: "bold",
+  },
+  sendButton: {
+    backgroundColor: "#fe6863",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 50,
+  },
+  sendButtonText: {
+    color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
   },

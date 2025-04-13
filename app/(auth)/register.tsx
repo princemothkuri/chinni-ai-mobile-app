@@ -8,11 +8,13 @@ import {
   StyleSheet,
   Alert,
   ScrollView,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useColorScheme } from "react-native";
 import { useDispatch } from "react-redux";
 import { setIsLoggedIn } from "@/lib/redux/features/AppMain/appMainSlice"; // Import the action to set login state
+import { LinearGradient } from "expo-linear-gradient";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -75,14 +77,17 @@ const Register = () => {
   };
 
   return (
-    <ScrollView
-      contentContainerStyle={[
-        styles.container,
-        {
-          backgroundColor: theme === "dark" ? "#121212" : "#f8f9fa", // Set background color based on theme
-        },
-      ]}
+    <LinearGradient
+      colors={["#ffffff", "rgba(254, 104, 99, 0.46)"]}
+      style={[styles.container]}
     >
+      <View style={styles.logoContainer}>
+        <Image
+          source={require("@/assets/images/logos/full-logo.png")}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+      </View>
       <Text
         style={[
           styles.title,
@@ -190,11 +195,7 @@ const Register = () => {
       </View>
 
       <TouchableOpacity
-        style={[
-          styles.button,
-          loading && styles.disabledButton,
-          { backgroundColor: theme === "dark" ? "#28a745" : "#007bff" }, // Button color based on theme
-        ]}
+        style={[styles.button, loading && styles.disabledButton]}
         onPress={handleRegister}
         disabled={loading}
       >
@@ -204,7 +205,7 @@ const Register = () => {
           <Text style={styles.buttonText}>Register</Text>
         )}
       </TouchableOpacity>
-    </ScrollView>
+    </LinearGradient>
   );
 };
 
@@ -215,6 +216,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 30,
+  },
+  logoContainer: {
+    marginBottom: 20,
+  },
+  logo: {
+    width: 300,
+    height: 100,
   },
   title: {
     fontSize: 28,
@@ -257,6 +265,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 50,
     borderRadius: 10,
+    backgroundColor: "#fe6863",
     justifyContent: "center",
     alignItems: "center",
     marginTop: 10,

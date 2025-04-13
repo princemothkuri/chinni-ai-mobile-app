@@ -6,6 +6,7 @@ import {
   Image,
   useColorScheme,
   ScrollView,
+  TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -14,11 +15,14 @@ const Home = () => {
   const isLight = theme === "light";
 
   return (
-    <>
+    <LinearGradient
+      colors={["#ffffff", "rgba(249, 137, 133, 0.46)"]}
+      style={styles.container}
+    >
       {/* Hero Section */}
       <View style={styles.heroSection}>
         <Image
-          source={require("@/assets/images/hero-image.jpg")} // Replace with the actual path to the image
+          source={require("@/assets/images/banner-image.jpeg")} // Replace with the actual path to the image
           style={styles.heroImage}
         />
         <LinearGradient
@@ -31,14 +35,12 @@ const Home = () => {
           <Text style={[styles.subtitle, { color: "#ddd" }]}>
             Your AI-powered companion for seamless voice and text interactions.
           </Text>
+          <TouchableOpacity style={styles.heroButton}>
+            <Text style={styles.heroButtonText}>Get Started</Text>
+          </TouchableOpacity>
         </LinearGradient>
       </View>
-      <ScrollView
-        style={[
-          styles.container,
-          { backgroundColor: isLight ? "#fff" : "#000" },
-        ]}
-      >
+      <ScrollView style={[styles.container]}>
         {/* Features Section */}
         <View style={styles.featuresSection}>
           <Text
@@ -52,14 +54,7 @@ const Home = () => {
 
           {/* Feature Items */}
           {features.map((feature, index) => (
-            <View
-              key={index}
-              style={[
-                styles.featureItem,
-                index % 2 === 0 ? styles.leftAligned : styles.rightAligned,
-              ]}
-            >
-              <Image source={feature.image} style={styles.featureImage} />
+            <View key={index} style={[styles.featureItem]}>
               <View style={styles.featureContent}>
                 <Text
                   style={[
@@ -82,7 +77,7 @@ const Home = () => {
           ))}
         </View>
       </ScrollView>
-    </>
+    </LinearGradient>
   );
 };
 
@@ -116,6 +111,7 @@ const features = [
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    // backgroundColor: "#321451",
   },
   heroSection: {
     height: 300,
@@ -125,6 +121,18 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
     resizeMode: "cover",
+  },
+  heroButton: {
+    backgroundColor: "#fe6863",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 50,
+    marginTop: 20,
+  },
+  heroButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   heroOverlay: {
     position: "absolute",
@@ -137,6 +145,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   heroText: {
+    marginTop: 50,
     fontSize: 28,
     fontWeight: "bold",
     textAlign: "center",
@@ -160,12 +169,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginBottom: 30,
-  },
-  leftAligned: {
-    flexDirection: "row",
-  },
-  rightAligned: {
-    flexDirection: "row-reverse",
+    borderWidth: 1,
+    borderColor: "#f98985",
+    borderRadius: 10,
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 10, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 10,
+    backgroundColor: "rgb(255, 192, 190)",
   },
   featureImage: {
     width: 80,

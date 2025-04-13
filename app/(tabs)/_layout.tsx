@@ -3,7 +3,15 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default () => {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: "#fe6863",
+        },
+        tabBarActiveTintColor: "#fff",
+        tabBarInactiveTintColor: "#fff",
+      }}
+    >
       <Tabs.Screen
         name="home"
         options={{
@@ -33,17 +41,17 @@ export default () => {
         }}
       />
       <Tabs.Screen
-        name="demo"
+        name="dashboard"
         options={{
           headerShown: false,
           tabBarIcon: ({ focused, color, size }) => (
             <Ionicons
-              name={focused ? "person" : "person-outline"}
+              name={focused ? "grid" : "grid-outline"}
               size={size}
               color={color}
             />
           ),
-          tabBarLabel: "Demo",
+          tabBarLabel: "Dashboard",
         }}
       />
       <Tabs.Screen

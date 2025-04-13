@@ -7,11 +7,13 @@ import {
   ActivityIndicator,
   StyleSheet,
   Alert,
+  Image,
 } from "react-native";
 import { useColorScheme } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Import Ionicons from Expo
 import { useDispatch } from "react-redux";
 import { setIsLoggedIn } from "@/lib/redux/features/AppMain/appMainSlice"; // Import the action to set login state
+import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 
 const Login = () => {
@@ -55,12 +57,17 @@ const Login = () => {
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        { backgroundColor: theme === "dark" ? "#121212" : "#f8f9fa" },
-      ]}
+    <LinearGradient
+      colors={["#ffffff", "rgba(254, 104, 99, 0.46)"]}
+      style={[styles.container]}
     >
+      <View style={styles.logoContainer}>
+        <Image
+          source={require("@/assets/images/logos/full-logo.png")}
+          style={styles.logo}
+          resizeMode="contain"
+        />
+      </View>
       <Text
         style={[styles.title, { color: theme === "dark" ? "#fff" : "#333" }]}
       >
@@ -108,6 +115,10 @@ const Login = () => {
         </TouchableOpacity>
       </View>
 
+      <View style={styles.forgotPasswordContainer}>
+        <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
+      </View>
+
       <TouchableOpacity
         style={[styles.button, loading && styles.disabledButton]}
         onPress={handleLogin}
@@ -119,7 +130,7 @@ const Login = () => {
           <Text style={styles.buttonText}>Login</Text>
         )}
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -129,6 +140,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 20,
+  },
+  logoContainer: {
+    marginBottom: 20,
+  },
+  logo: {
+    width: 300,
+    height: 100,
   },
   title: {
     fontSize: 28,
@@ -148,7 +166,7 @@ const styles = StyleSheet.create({
   button: {
     width: "100%",
     height: 50,
-    backgroundColor: "#007bff",
+    backgroundColor: "#fe6863",
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
@@ -159,19 +177,29 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   disabledButton: {
-    backgroundColor: "#7aa0d6",
+    opacity: 0.7,
   },
   passwordContainer: {
     width: "100%",
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 0,
   },
   eyeIcon: {
     position: "absolute",
     right: 15,
     top: "35%",
     transform: [{ translateY: -12 }], // Adjust for vertical centering of the icon
+  },
+  forgotPasswordContainer: {
+    width: "100%",
+    alignItems: "flex-end",
+    marginBottom: 20,
+  },
+  forgotPasswordText: {
+    color: "#fe6863",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

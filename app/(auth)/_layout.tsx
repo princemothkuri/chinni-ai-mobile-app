@@ -3,7 +3,16 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default () => {
   return (
-    <Tabs>
+    <Tabs
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: "#fe6863",
+        },
+        tabBarLabelStyle: {
+          color: "white",
+        },
+      }}
+    >
       <Tabs.Screen
         name="login"
         options={{
@@ -12,7 +21,7 @@ export default () => {
             <Ionicons
               name={focused ? "log-in" : "log-in-outline"}
               size={size}
-              color={color}
+              color="white"
             />
           ),
           tabBarLabel: "Login",
@@ -26,7 +35,7 @@ export default () => {
             <Ionicons
               name={focused ? "person-add" : "person-add-outline"}
               size={size}
-              color={color}
+              color="white"
             />
           ),
           tabBarLabel: "Register",
